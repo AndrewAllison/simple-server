@@ -1,0 +1,16 @@
+Íversion: '3.7'
+services:
+  db:
+    image: "postgres"
+    ports:
+      - "5492:5432"
+    env_file:
+      - .env.postgres # configure postgres
+    volumes:
+      - simple-server-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+    networks:
+      - simple-server
+volumes:
+  simple-server-data:
+networks:
+  simple-server:
