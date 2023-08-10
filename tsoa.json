@@ -1,0 +1,15 @@
+{
+  "entryFile": "src/server.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*.controller.ts"],
+  "spec": {
+    "outputDirectory": "config",
+    "specVersion": 3
+  },
+  "routes": {
+    "basePath": "/api/v1",
+    "entryFile": "./src/server.ts",
+    "routesDir": "config",
+    "middleware": "express"
+  }
+}

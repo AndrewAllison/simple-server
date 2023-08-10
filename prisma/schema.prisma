@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Attachment {
+  id String @id @default(cuid())
+
+  originalname String
+  filename     String
+  type         String
+  size         Int
+  path         String
+
+  meetingId String
+  meeting   Meeting @relation(fields: [meetingId], references: [id])
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Meeting {
+  id          String @id @default(cuid())
+  description String
+  notes       String
+
+  startDateTime DateTime?
+  endDateTime   DateTime?
+
+  attachments Attachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
