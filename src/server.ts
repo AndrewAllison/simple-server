@@ -12,6 +12,7 @@ import limiter from './libraries/rate-limit/rate-limiter'
 import { RegisterRoutes } from '../config/routes'
 import swaggerUi from 'swagger-ui-express'
 import { errorHandler } from './libraries/error-handling/error-handler'
+import cookieParser from 'cookie-parser'
 
 async function createExpressApp(): Promise<Express> {
   logger.configureLogger({
@@ -37,6 +38,7 @@ async function createExpressApp(): Promise<Express> {
     }),
   )
   app.use(limiter)
+  app.use(cookieParser())
 
   // General Config
   app.use(express.urlencoded({ extended: true }))
