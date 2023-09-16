@@ -1,11 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { PasswordService } from './password.service'
-import context from '../../../../__mocks__/context'
+import config from '../../../libraries/config/config'
 
 describe('OneTimePassCodeService', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.useFakeTimers({ shouldAdvanceTime: true })
+    vi.spyOn(config, 'get').mockReturnValue('&^*(iuhjilkm')
   })
 
   afterEach(() => {
@@ -25,7 +26,7 @@ describe('OneTimePassCodeService', () => {
     it('should generate a valid token', async function () {
       const userData = '1234retfg%$TRG'
 
-      const service = new PasswordService(context)
+      const service = new PasswordService()
       const token = await service.encryptPassword(userData)
 
       expect(token).not.toEqual(userData)
@@ -33,13 +34,9 @@ describe('OneTimePassCodeService', () => {
   })
 
   describe('validatePassword', () => {
-    beforeEach(() => {
-      vi.resetAllMocks()
-    })
-
     it('should return true with a valid password', async () => {
       const userData = 'P%^&8huin'
-      const service = new PasswordService(context)
+      const service = new PasswordService()
       const hashedPassword = await service.encryptPassword(userData)
 
       const result = await service.validatePassword(hashedPassword, userData)
@@ -49,7 +46,7 @@ describe('OneTimePassCodeService', () => {
 
     it('should return false with an invalid password', async () => {
       const userData = 'P%^&8huin'
-      const service = new PasswordService(context)
+      const service = new PasswordService()
       const hashedPassword = await service.encryptPassword(userData)
 
       const result = await service.validatePassword(
