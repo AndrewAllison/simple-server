@@ -27,6 +27,20 @@ const config = convict({
     default: 'info',
     env: 'LOG_LEVEL',
   },
+  issuer: {
+    doc: 'Token issuer',
+    format: 'String',
+    default: 'API-Issuer',
+    env: 'TOKEN_ISSUER',
+    arg: 'issuer',
+  },
+  secret: {
+    doc: 'Token secret',
+    format: 'String',
+    default: null,
+    env: 'TOKEN_SECRET',
+    arg: 'secret',
+  },
 })
 
 export default config

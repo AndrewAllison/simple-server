@@ -26,6 +26,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"LoginParams": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Attachment": {
 				"properties": {
 					"id": {
@@ -194,6 +210,31 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "CreateMeeting",
+				"responses": {
+					"200": {
+						"description": "Success"
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginParams"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/meetings/{meetingId}/attachments": {
