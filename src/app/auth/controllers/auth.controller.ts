@@ -10,7 +10,7 @@ import {
 import { Request as ExpressRequest } from 'express'
 import Context from '../../../libraries/context'
 import { LoginParams } from '../models/login.params'
-import { AuthService } from '../services/auth.service'
+import { PasswordService } from '../services/password.service'
 
 @Tags('Auth')
 @Route('auth')
@@ -22,6 +22,6 @@ export class AuthController extends Controller {
     @Body() loginParams: LoginParams,
   ) {
     const ctx = Context.get(req)
-    return new AuthService(ctx).validateUser(loginParams)
+    return new PasswordService(ctx).validateUser(loginParams)
   }
 }
