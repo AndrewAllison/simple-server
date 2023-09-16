@@ -10,7 +10,7 @@ import {
 import { Request as ExpressRequest } from 'express'
 import Context from '../../../libraries/context'
 import { LoginParams } from '../models/login.params'
-import { AuthService } from '../auth.service'
+import { AuthService } from '../services/auth.service'
 
 @Tags('Auth')
 @Route('auth')

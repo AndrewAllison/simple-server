@@ -1,7 +1,7 @@
-import config from '../../libraries/config/config'
+import config from '../../../libraries/config/config'
 import * as OTPAuth from 'otpauth'
 
-export class PasswordService {
+export class OneTimePassCodeService {
   issuer: string
   secret: string
 
@@ -29,7 +29,7 @@ export class PasswordService {
     return totp.generate()
   }
 
-  validate(token: string, digits = 6, period = 30) {
+  validateOneTimePasscode(token: string, digits = 6, period = 30) {
     const totp = new OTPAuth.TOTP({
       issuer: this.issuer,
       algorithm: 'SHA3-512',

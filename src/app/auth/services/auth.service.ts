@@ -1,4 +1,4 @@
-import Context from '../../libraries/context'
+import Context from '../../../libraries/context'
 
 export class AuthService {
   constructor(private readonly context: Context) {}
