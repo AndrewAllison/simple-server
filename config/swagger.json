@@ -26,8 +26,17 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"LoginParams": {
+			"SignUpParams": {
 				"properties": {
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"displayName": {
+						"type": "string"
+					},
 					"email": {
 						"type": "string"
 					},
@@ -36,146 +45,10 @@
 					}
 				},
 				"required": [
+					"firstName",
+					"lastName",
 					"email",
 					"password"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Attachment": {
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"originalname": {
-						"type": "string"
-					},
-					"filename": {
-						"type": "string"
-					},
-					"type": {
-						"type": "string"
-					},
-					"size": {
-						"type": "number",
-						"format": "double"
-					},
-					"path": {
-						"type": "string"
-					},
-					"meetingId": {
-						"type": "string"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time",
-						"nullable": true
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time",
-						"nullable": true
-					}
-				},
-				"required": [
-					"id",
-					"originalname",
-					"filename",
-					"type",
-					"size",
-					"path",
-					"meetingId"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Meeting": {
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"notes": {
-						"type": "string"
-					},
-					"startDateTime": {
-						"type": "string",
-						"format": "date-time",
-						"nullable": true
-					},
-					"endDateTime": {
-						"type": "string",
-						"format": "date-time",
-						"nullable": true
-					},
-					"attachments": {
-						"items": {
-							"$ref": "#/components/schemas/Attachment"
-						},
-						"type": "array"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"required": [
-					"id",
-					"description",
-					"notes",
-					"startDateTime",
-					"endDateTime",
-					"createdAt",
-					"updatedAt"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MeetingsResponse": {
-				"properties": {
-					"items": {
-						"items": {
-							"$ref": "#/components/schemas/Meeting"
-						},
-						"type": "array"
-					}
-				},
-				"required": [
-					"items"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MeetingCreateParams": {
-				"properties": {
-					"description": {
-						"type": "string"
-					},
-					"notes": {
-						"type": "string"
-					},
-					"startDateTime": {
-						"type": "string",
-						"format": "date-time",
-						"nullable": true
-					},
-					"endDateTime": {
-						"type": "string",
-						"format": "date-time",
-						"nullable": true
-					}
-				},
-				"required": [
-					"description",
-					"notes",
-					"startDateTime",
-					"endDateTime"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -212,12 +85,61 @@
 				"parameters": []
 			}
 		},
-		"/auth/login": {
+		"/auth/sign-up": {
 			"post": {
-				"operationId": "CreateMeeting",
+				"operationId": "SignUp",
 				"responses": {
 					"200": {
-						"description": "Success"
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"user": {
+											"properties": {
+												"modifiedAt": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"createdAt": {
+													"type": "string",
+													"format": "date-time"
+												},
+												"email": {
+													"type": "string"
+												},
+												"displayName": {
+													"type": "string"
+												},
+												"lastName": {
+													"type": "string"
+												},
+												"firstName": {
+													"type": "string"
+												},
+												"id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"modifiedAt",
+												"createdAt",
+												"email",
+												"displayName",
+												"lastName",
+												"firstName",
+												"id"
+											],
+											"type": "object"
+										}
+									},
+									"required": [
+										"user"
+									],
+									"type": "object"
+								}
+							}
+						}
 					}
 				},
 				"tags": [
@@ -230,202 +152,11 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/LoginParams"
+								"$ref": "#/components/schemas/SignUpParams"
 							}
 						}
 					}
 				}
-			}
-		},
-		"/meetings/{meetingId}/attachments": {
-			"post": {
-				"operationId": "UploadFile",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/Meeting"
-										},
-										{}
-									],
-									"nullable": true
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Meetings"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "meetingId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/meetings": {
-			"get": {
-				"operationId": "GetAllMeetings",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/MeetingsResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Retrieves a list of all the meetings.\nSupply the unique meeting ID and receive corresponding meeting details.",
-				"tags": [
-					"Meetings"
-				],
-				"security": [],
-				"parameters": []
-			},
-			"post": {
-				"operationId": "CreateMeeting",
-				"responses": {
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"updatedAt": {
-											"type": "string",
-											"format": "date-time"
-										},
-										"createdAt": {
-											"type": "string",
-											"format": "date-time"
-										},
-										"endDateTime": {
-											"type": "string",
-											"format": "date-time"
-										},
-										"startDateTime": {
-											"type": "string",
-											"format": "date-time"
-										},
-										"notes": {
-											"type": "string"
-										},
-										"description": {
-											"type": "string"
-										},
-										"id": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"updatedAt",
-										"createdAt",
-										"endDateTime",
-										"startDateTime",
-										"notes",
-										"description",
-										"id"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"description": "Creates a new meeting entry in the database.\nSupply the relevant details to create the meeting details.",
-				"tags": [
-					"Meetings"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"description": "Details with which the meeting is created",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/MeetingCreateParams",
-								"description": "Details with which the meeting is created"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/meetings/{meetingId}": {
-			"get": {
-				"operationId": "GetMeeting",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"allOf": [
-										{
-											"$ref": "#/components/schemas/Meeting"
-										}
-									],
-									"nullable": true
-								}
-							}
-						}
-					}
-				},
-				"description": "Retrieves the details of an existing meeting.\nSupply the unique meeting ID and receive corresponding meeting details.",
-				"tags": [
-					"Meetings"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"description": "The meetings identifier",
-						"in": "path",
-						"name": "meetingId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			},
-			"delete": {
-				"operationId": "DeleteMeeting",
-				"responses": {
-					"204": {
-						"description": "Deleted"
-					}
-				},
-				"description": "Removes the meeting from the data store.\nSupply the unique meeting ID and remove corresponding meeting details.",
-				"tags": [
-					"Meetings"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"description": "The meetings identifier",
-						"in": "path",
-						"name": "meetingId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
 			}
 		}
 	},

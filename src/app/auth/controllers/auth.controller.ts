@@ -8,20 +8,47 @@ import {
   Tags,
 } from 'tsoa'
 import { Request as ExpressRequest } from 'express'
-import Context from '../../../libraries/context'
-import { LoginParams } from '../models/login.params'
-import { PasswordService } from '../services/password.service'
+import { UserService } from '../services/user.service'
+
+export class AuthError extends Error {
+  constructor(message: string) {
+    super(message)
+  }
+}
+
+export interface SignUpParams {
+  firstName: string
+  lastName: string
+  displayName?: string | undefined
+  email: string
+
+  password: string
+}
 
 @Tags('Auth')
 @Route('auth')
 export class AuthController extends Controller {
-  @Post('/login')
+  constructor() {
+    super()
+  }
+
+  @Post('/sign-up')
   @SuccessResponse('200', 'Success')
-  public async createMeeting(
+  public async signUp(
     @Request() req: ExpressRequest,
-    @Body() loginParams: LoginParams,
+    @Body() loginParams: SignUpParams,
   ) {
-    const ctx = Context.get(req)
-    return new PasswordService(ctx).validateUser(loginParams)
+    console.log(loginParams)
+    const userService = new UserService()
+    // Check the user is not already in the db
+    const existingUser = await userService.getUserByEmail(loginParams.email)
+    console.log(existingUser)
+    if (existingUser) {
+      throw new AuthError('An issue occurred creating that user')
+    }
+
+    const user = await userService.createUser(loginParams)
+
+    return { user }
   }
 }

@@ -13,6 +13,7 @@ import { RegisterRoutes } from '../config/routes'
 import swaggerUi from 'swagger-ui-express'
 import { errorHandler } from './libraries/error-handling/error-handler'
 import cookieParser from 'cookie-parser'
+import requestIp from 'request-ip'
 
 async function createExpressApp(): Promise<Express> {
   logger.configureLogger({
@@ -39,6 +40,7 @@ async function createExpressApp(): Promise<Express> {
   )
   app.use(limiter)
   app.use(cookieParser())
+  app.use(requestIp.mw())
 
   // General Config
   app.use(express.urlencoded({ extended: true }))

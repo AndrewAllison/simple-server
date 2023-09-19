@@ -11,8 +11,10 @@ export class ServerCheckController extends Controller {
   public getAppCheck(@Request() req: ExRequest): ServerCheckResponse {
     const ctx = Context.get(req)
 
+    console.log(req.ip)
+
     return {
-      version: config.get('version'),
+      version: '1.0.0',
       env: config.get('env'),
       requestId: ctx?.requestId,
     }

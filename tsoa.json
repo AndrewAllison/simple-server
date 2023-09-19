@@ -7,7 +7,7 @@
     "specVersion": 3
   },
   "routes": {
-    "basePath": "/api/v1",
+    "basePath": "/",
     "entryFile": "./src/server.ts",
     "routesDir": "config",
     "middleware": "express"
